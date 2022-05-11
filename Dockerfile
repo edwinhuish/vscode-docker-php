@@ -83,8 +83,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && pecl install redis && docker-php-ext-enable redis \
   && pecl install swoole && docker-php-ext-enable swoole \
   && yes '' | pecl install imagick && docker-php-ext-enable imagick \
-  # && docker-php-source delete \
-  # && apt-get remove -y g++ wget \
+  && docker-php-source delete \
+  && apt-get remove -y g++ wget \
   && apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /tmp/* /var/tmp/*
