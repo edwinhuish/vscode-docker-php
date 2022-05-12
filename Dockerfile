@@ -9,11 +9,11 @@ ARG NODE_VERSION="16"
 RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
 
 # 修改 xdebug 配置
-RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20210902/xdebug.so' > /usr/local/etc/php/xdebug.ini \
-  && echo 'xdebug.start_with_request = no' >> /usr/local/etc/php/xdebug.ini \
-  && echo 'xdebug.mode = debug' >> /usr/local/etc/php/xdebug.ini \
-  && echo 'xdebug.client_host = localhost' >> /usr/local/etc/php/xdebug.ini \
-  && echo 'xdebug.client_port = 9003' >> /usr/local/etc/php/xdebug.ini
+RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20210902/xdebug.so' > /usr/local/etc/php/conf.d/xdebug.ini \
+  && echo 'xdebug.start_with_request = no' >> /usr/local/etc/php/conf.d/xdebug.ini \
+  && echo 'xdebug.mode = debug' >> /usr/local/etc/php/conf.d/xdebug.ini \
+  && echo 'xdebug.client_host = localhost' >> /usr/local/etc/php/conf.d/xdebug.ini \
+  && echo 'xdebug.client_port = 9003' >> /usr/local/etc/php/conf.d/xdebug.ini
 
 
 # [Optional] Uncomment this line to install global node packages.
@@ -96,6 +96,9 @@ RUN echo "export PATH=\"\$PATH:\$HOME/.composer/vendor/bin\"" >> ${HOME}/.bashrc
   robmorgan/phinx
 
 USER root
+
+RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini \
+  && sed -i 's#;include_path = ".:/php/includes"#include_path = ".:/php/includes"#g' /usr/local/etc/php/php.ini
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g yarn eslint" 2>&1
