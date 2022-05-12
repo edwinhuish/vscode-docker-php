@@ -98,7 +98,7 @@ RUN echo "export PATH=\"\$PATH:\$HOME/.composer/vendor/bin\"" >> ${HOME}/.bashrc
 USER root
 
 RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini \
-  && sed -i 's#;include_path = ".:/php/includes"#include_path = ".:/php/includes"#g' /usr/local/etc/php/php.ini
+  && sed -i 's#;include_path = ".:/php/includes"#include_path = ".:/workspace/.devcontainer/php"#g' /usr/local/etc/php/php.ini
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g yarn eslint" 2>&1
