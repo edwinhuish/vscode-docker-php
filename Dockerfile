@@ -89,14 +89,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /tmp/* /var/tmp/*
 
-USER vscode
-RUN echo "export PATH=\"\$PATH:\$HOME/.composer/vendor/bin\"" >> ${HOME}/.bashrc \
-  && composer global require -q \
-  friendsofphp/php-cs-fixer \
-  robmorgan/phinx
-
-USER root
-
 RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini \
   && sed -i 's#;include_path = ".:/php/includes"#include_path = ".:/workspace/.devcontainer/php"#g' /usr/local/etc/php/php.ini
 
