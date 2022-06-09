@@ -11,8 +11,10 @@ RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/
 # 修改 xdebug 配置
 RUN sed -i 's|^xdebug\.start_with_request.*$|xdebug\.start_with_request = no|g' /usr/local/etc/php/conf.d/xdebug.ini
 
-COPY ./scripts/docker-debian.sh /tmp/docker-debian.sh
-RUN bash /tmp/docker-debian.sh "true" "/var/run/docker-host.sock" "/var/run/docker.sock" "vscode";
+COPY ./scripts/* /tmp/scripts/
+RUN bash /tmp/scripts/docker-debian.sh "true" "/var/run/docker-host.sock" "/var/run/docker.sock" "vscode"; \
+    && bash /tmp/scripts/sshd-debian.sh \
+    && bash /tmp/scripts/git-lfs-debian.sh
 
 # [Optional] Uncomment this section to install additional OS packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
@@ -59,8 +61,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   pgsql \
   soap \
   xsl \
-  git \
-  open-ssh \
   && apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /tmp/* /var/tmp/*
