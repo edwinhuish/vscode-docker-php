@@ -9,11 +9,7 @@ ARG NODE_VERSION="16"
 RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
 
 # 修改 xdebug 配置
-RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20210902/xdebug.so' > /usr/local/etc/php/conf.d/xdebug.ini \
-  && echo 'xdebug.start_with_request = no' >> /usr/local/etc/php/conf.d/xdebug.ini \
-  && echo 'xdebug.mode = debug' >> /usr/local/etc/php/conf.d/xdebug.ini \
-  && echo 'xdebug.client_host = localhost' >> /usr/local/etc/php/conf.d/xdebug.ini \
-  && echo 'xdebug.client_port = 9003' >> /usr/local/etc/php/conf.d/xdebug.ini
+RUN sed -i 's|^xdebug\.start_with_request.*$|xdebug\.start_with_request = no|g' /usr/local/etc/php/conf.d/xdebug.ini
 
 
 # [Optional] Uncomment this line to install global node packages.
@@ -63,7 +59,10 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   pdo_pgsql \
   pgsql \
   soap \
-  xsl
+  xsl \
+  && apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y \
+  && rm -rf /var/lib/apt/lists/* \
+  && rm -rf /tmp/* /var/tmp/*
   
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
   && docker-php-ext-install -j$(nproc) gd \
@@ -85,11 +84,6 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
   && pecl install swoole && docker-php-ext-enable swoole \
   && yes '' | pecl install imagick && docker-php-ext-enable imagick \
   && docker-php-source delete
-
-RUN apt-get remove -y g++ wget \
-  && apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y \
-  && rm -rf /var/lib/apt/lists/* \
-  && rm -rf /tmp/* /var/tmp/*
 
 COPY ./data/php/* /usr/local/etc/php/
 
