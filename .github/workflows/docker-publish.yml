@@ -9,10 +9,12 @@ on:
     branches:
       - master
       - '8.1'
+      - '7.4'
   pull_request:
     branches:
       - master
       - '8.1'
+      - '7.4'
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -66,5 +68,5 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}-${{ steps.time.outputs.time }}, ${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_NAME }}:latest
+          tags: ${{ steps.meta.outputs.tags }}-${{ steps.time.outputs.time }}, ${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}-latest
           labels: ${{ steps.meta.outputs.labels }}
