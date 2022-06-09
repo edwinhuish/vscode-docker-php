@@ -63,8 +63,9 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   pdo_pgsql \
   pgsql \
   soap \
-  xsl \
-  && docker-php-ext-configure gd --with-freetype --with-jpeg \
+  xsl
+  
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
   && docker-php-ext-install -j$(nproc) gd \
   && PHP_OPENSSL=yes docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
   && docker-php-ext-install -j$(nproc) imap \
@@ -83,8 +84,9 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && pecl install redis && docker-php-ext-enable redis \
   && pecl install swoole && docker-php-ext-enable swoole \
   && yes '' | pecl install imagick && docker-php-ext-enable imagick \
-  && docker-php-source delete \
-  && apt-get remove -y g++ wget \
+  && docker-php-source delete
+
+RUN apt-get remove -y g++ wget \
   && apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /tmp/* /var/tmp/*
