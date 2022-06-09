@@ -20,8 +20,10 @@ RUN sed -i 's|^xdebug\.start_with_request.*$|xdebug\.start_with_request = no|g' 
     && sed -i 's|^xdebug\.client_port.*$|xdebug\.client_port = 9003|g' /usr/local/etc/php/conf.d/xdebug.ini
 
 
-COPY ./scripts/docker-debian.sh /tmp/docker-debian.sh
-RUN bash /tmp/docker-debian.sh "true" "/var/run/docker-host.sock" "/var/run/docker.sock" "vscode";
+COPY ./scripts/* /tmp/scripts/
+RUN bash /tmp/scripts/docker-debian.sh "true" "/var/run/docker-host.sock" "/var/run/docker.sock" "vscode"; \
+    && bash /tmp/scripts/sshd-debian.sh \
+    && bash /tmp/scripts/git-lfs-debian.sh
 
 
 # [Optional] Uncomment this section to install additional OS packages.
@@ -69,8 +71,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   pgsql \
   soap \
   xsl \
-  git \
-  open-ssh \
   && apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /tmp/* /var/tmp/*
