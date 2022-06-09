@@ -77,7 +77,6 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
   && docker-php-ext-install pcntl \
   && docker-php-ext-install -j$(nproc) iconv \
   && CFLAGS="$CFLAGS -D_GNU_SOURCE" docker-php-ext-install sockets \
-  && pecl install xmlrpc-1.0.0RC3 && docker-php-ext-enable xmlrpc \
   && pecl install memcached && docker-php-ext-enable memcached \
   && pecl install mongodb && docker-php-ext-enable mongodb \
   && pecl install redis && docker-php-ext-enable redis \
