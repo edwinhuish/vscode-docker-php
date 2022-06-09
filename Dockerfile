@@ -9,21 +9,14 @@ ARG NODE_VERSION="16"
 RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
 
 # 修改 xdebug 配置
-RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20210902/xdebug.so' > /usr/local/etc/php/conf.d/xdebug.ini \
-  && echo 'xdebug.start_with_request = no' >> /usr/local/etc/php/conf.d/xdebug.ini \
-  && echo 'xdebug.mode = debug' >> /usr/local/etc/php/conf.d/xdebug.ini \
-  && echo 'xdebug.client_host = localhost' >> /usr/local/etc/php/conf.d/xdebug.ini \
-  && echo 'xdebug.client_port = 9003' >> /usr/local/etc/php/conf.d/xdebug.ini
-
-# 修改 xdebug 配置
 RUN sed -i 's|^xdebug\.start_with_request.*$|xdebug\.start_with_request = no|g' /usr/local/etc/php/conf.d/xdebug.ini \
     && sed -i 's|^xdebug\.client_port.*$|xdebug\.client_port = 9003|g' /usr/local/etc/php/conf.d/xdebug.ini
 
 
 COPY ./scripts/* /tmp/scripts/
-RUN bash /tmp/scripts/docker-debian.sh "true" "/var/run/docker-host.sock" "/var/run/docker.sock" "vscode"; \
-    && bash /tmp/scripts/sshd-debian.sh \
-    && bash /tmp/scripts/git-lfs-debian.sh
+RUN bash /tmp/scripts/sshd-debian.sh \
+    && bash /tmp/scripts/git-lfs-debian.sh \
+    && bash /tmp/scripts/docker-debian.sh "true" "/var/run/docker-host.sock" "/var/run/docker.sock" "vscode";
 
 
 # [Optional] Uncomment this section to install additional OS packages.
