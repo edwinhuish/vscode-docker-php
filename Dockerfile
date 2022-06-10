@@ -94,5 +94,5 @@ COPY ./data/home/* /home/vscode/
 RUN chown vscode:vscode /home/vscode -R
 
 # Fire Docker/Moby script if needed along with Oryx's benv
-ENTRYPOINT [ "/usr/local/share/docker-init.sh", "/usr/local/share/ssh-init.sh" ]
+ENTRYPOINT [ "/usr/local/share/docker-init.sh", "/usr/local/share/ssh-init.sh", "docker-php-entrypoint" ]
 CMD [ "sleep", "infinity" ]
