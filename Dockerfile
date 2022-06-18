@@ -10,6 +10,7 @@ RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/
 
 # 修改 xdebug 配置
 RUN sed -i 's|^xdebug\.start_with_request.*$|xdebug\.start_with_request = no|g' /usr/local/etc/php/conf.d/xdebug.ini
+RUN sed -i 's|^xdebug\.client_port.*$|xdebug\.client_port = 9003|g' /usr/local/etc/php/conf.d/xdebug.ini
 
 COPY ./scripts/* /tmp/scripts/
 RUN bash /tmp/scripts/sshd-debian.sh \
