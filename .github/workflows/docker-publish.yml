@@ -7,10 +7,10 @@ on:
   # but only for the main branch
   push:
     branches:
-      - '8.1'
+      - '8.0'
   pull_request:
     branches:
-      - '8.1'
+      - '8.0'
 
 env:
   # Use docker.io for Docker Hub if empty
